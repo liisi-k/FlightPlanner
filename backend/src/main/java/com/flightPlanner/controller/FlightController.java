@@ -26,6 +26,9 @@ public class FlightController {
             @RequestParam(required = false) String date
     ) {
         return flights.stream()
+                .filter(flight -> destination == null || flight.getDestination().equalsIgnoreCase(destination))
+                .filter(flight -> price == null || flight.getPrice().equals(price))
+                .filter(flight -> date == null || flight.getDepartureDate().toString().equals(date))
                 .collect(Collectors.toList());
     }
 
