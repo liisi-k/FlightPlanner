@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/flights")
+@CrossOrigin(origins = "http://localhost:5173")  
 public class FlightController {
 
     private final List<Flight> flights = new ArrayList<>(List.of(
