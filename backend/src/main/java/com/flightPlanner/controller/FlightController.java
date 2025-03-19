@@ -4,6 +4,7 @@ import com.flightPlanner.model.Flight;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,10 +15,14 @@ import java.util.stream.Collectors;
 public class FlightController {
 
     private final List<Flight> flights = new ArrayList<>(List.of(
-            new Flight("FL123", "London", "120€", LocalDate.of(2025, 3, 20)),
-            new Flight("FL456", "Paris", "150€", LocalDate.of(2025, 3, 25)),
-            new Flight("FL789", "New York", "400€", LocalDate.of(2025, 4, 5)),
-            new Flight("FL999", "Berlin", "180€", LocalDate.of(2025, 3, 22))
+            new Flight("FL123", "London", "120€", LocalDate.of(2025, 3, 20), LocalTime.of(14, 30),
+            "/images/imageLondon.jpg"),
+            new Flight("FL456", "Paris", "150€", LocalDate.of(2025, 3, 25), LocalTime.of(15, 45),
+            "/images/imageParis.jpg"),
+            new Flight("FL789", "Santorini", "220", LocalDate.of(2025, 4, 5), LocalTime.of(6, 30),
+            "/images/imageSantorini.jpg"),
+            new Flight("FL999", "Rome", "180€", LocalDate.of(2025, 3, 22), LocalTime.of(10, 00),
+            "/images/imageRome.jpg")
     ));
 
     @GetMapping
