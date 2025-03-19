@@ -55,6 +55,13 @@ export default {
 </script>
 
 <style scoped>
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .destinationSearch {
   margin-bottom: 20px;
   background-color: rgb(255, 255, 255);
@@ -63,6 +70,11 @@ export default {
   width: 250px;
   height: 30px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  position: absolute;
+  right: 200px;
+  top: 20%;
+  transform: translateY(-50%);
 }
+
 </style>
+
