@@ -1,27 +1,27 @@
 <template>
   <div class="home">
-    <input
-      v-model="destination"
-      @input="filterFlights"
-      @keyup.enter="searchFlights"
-      placeholder="Enter your destination"
-      class="destinationSearch"
-    />
-    <FlightList :flights="filteredFlights" />
+      <FlightList :flights="filteredFlights" />
+    <FlightFilters @update-filters="applyFilters" />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import FlightList from '../components/FlightList.vue';
+import FlightFilters from '../components/FlightFilters.vue';
 
 export default {
-  components: { FlightList },
+  components: { FlightList, FlightFilters },
   data() {
     return {
-      destination: '',
       flights: [],
-      filteredFlights: []
+      filteredFlights: [],
+      filters: {
+        destination: '',
+        month: '',
+        maxPrice: null,
+        timeOfDay: '',
+      },
     };
   },
   async mounted() {
@@ -32,49 +32,40 @@ export default {
       try {
         const response = await axios.get('http://localhost:8080/api/flights');
         this.flights = response.data;
-        this.filteredFlights = response.data;
+        this.filteredFlights = this.flights;
       } catch (error) {
         console.error('Error fetching flights:', error);
       }
     },
-    filterFlights() {
-      this.filteredFlights = this.flights.filter(flight =>
-        flight.destination.toLowerCase().includes(this.destination.toLowerCase())
-      );
+    applyFilters(newFilters) {
+      this.filters = newFilters;
+      this.filteredFlights = this.flights.filter(flight => {
+        const matchesDestination = !newFilters.destination || 
+          flight.destination.toLowerCase().includes(newFilters.destination.toLowerCase());
+        const matchesMonth = !newFilters.month || flight.departureDate?.startsWith(newFilters.month);
+        const matchesPrice = !newFilters.maxPrice || parseFloat(flight.price) <= newFilters.maxPrice;
+        const matchesTime = !newFilters.timeOfDay || this.getTimeCategory(flight) === newFilters.timeOfDay;
+
+        return matchesDestination && matchesMonth && matchesPrice && matchesTime;
+      });
     },
-    async searchFlights() {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/flights?destination=${this.destination}`);
-        this.filteredFlights = response.data;
-      } catch (error) {
-        console.error('Error fetching flights:', error);
-      }
+    getTimeCategory(flight) {
+      const hour = parseInt(flight.departureTime?.split(':')[0], 10);
+      if (hour >= 6 && hour < 12) return 'morning';
+      if (hour >= 12 && hour < 16) return 'noon';
+      if (hour >= 16 && hour < 21) return 'evening';
+      return 'night';
     }
   }
 };
 </script>
-
+  
 <style scoped>
 .home {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 20px;
 }
-
-.destinationSearch {
-  margin-bottom: 20px;
-  background-color: rgb(255, 255, 255);
-  padding: 8px;
-  border-radius: 10px;
-  width: 250px;
-  height: 30px;
-  font-size: 16px;
-  position: absolute;
-  right: 200px;
-  top: 20%;
-  transform: translateY(-50%);
-}
-
 </style>
-

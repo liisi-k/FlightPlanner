@@ -1,22 +1,22 @@
 <template>
   <div class="allBox">
     <h2>Available Flights</h2>
-    <div class="flight-list-container">
-      <ul v-if="flights.length > 0">
-        <li v-for="flight in flights" :key="flight.flightNumber">
-          <div class="flight-box">
-            <img :src="'http://localhost:8080' + flight.imageUrl" :alt="flight.destination" class="flight-image" />
-            <div class="flight-details">
-                <span class="destination">{{ flight.destination }}</span>
-                <span class="price">{{ flight.price }}</span>
-              <span class="text">{{ flight.departureDate }} at {{ flight.departureTime }}</span>
-            </div>
+    <ul v-if="flights.length > 0">
+      <li v-for="flight in flights" :key="flight.flightNumber">
+        <div class="flight-box">
+          <img :src="'http://localhost:8080' + flight.imageUrl" :alt="flight.destination" class="flight-image" />
+          <div class="flight-details">
+            <span class="text dest">{{ flight.destination }}</span>
+            <span class="text price">{{ flight.price }}</span>
+            <span class="text">{{ flight.departureDate }} at {{ flight.departureTime }}</span>
           </div>
-        </li>
-      </ul>
-    </div>
+        </div>
+      </li>
+    </ul>
+    <p v-else class="text no">No flights found.</p>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -32,25 +32,20 @@ ul {
   padding: 0;
   margin: 0;
 }
+
 .allBox {
   padding: 30px;
   border: 2px solid #f1f1f1;
   background-color: rgba(255, 255, 255, 0.513);
   border-radius: 12px;
-  color: #333;
-  max-width: 800px;
-  margin-top: -2%;
+  min-width: 800px;
+  margin-top: -3%;
   margin-left: center;
-  height: 75%;
+  height: 85vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-}
-
-.flight-list-container {
-  overflow-y: auto;
-  max-height: 70vh;
-  padding-right: 10px;
+  overflow-y: scroll;
 }
 
 .flight-box {
@@ -76,31 +71,39 @@ ul {
 }
 
 .flight-details {
+  height: 10vh;
+  width: 27vw;
   display: flex;
   flex-direction: column;
   gap: 8px;
   text-align: center;
 }
 
-
-
-.destination {
+.text.dest{
   font-weight: bold;
   color: #333;
   font-size: 30px;
   text-align: left;
 }
 
-.price {
-  font-weight: bold;
+.text.price {
   color: #007bff;
-  font-size: 30px;
   text-align: right;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 .text {
   color: #888;
   font-size: 14px;
   margin-top: 5px;
+}
+.text.no {
+  color: #000000;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 </style>
