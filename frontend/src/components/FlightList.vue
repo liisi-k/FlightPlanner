@@ -3,14 +3,14 @@
     <h2>Available Flights</h2>
     <ul v-if="flights.length > 0">
       <li v-for="flight in flights" :key="flight.flightNumber">
-        <div class="flight-box">
+        <button class="flight-box" @click="goToSeats(flight.flightNumber)">
           <img :src="'http://localhost:8080' + flight.imageUrl" :alt="flight.destination" class="flight-image" />
           <div class="flight-details">
             <span class="text dest">{{ flight.destination }}</span>
             <span class="text price">{{ flight.price }}</span>
             <span class="text">{{ flight.departureDate }} at {{ flight.departureTime }}</span>
           </div>
-        </div>
+        </button>
       </li>
     </ul>
     <p v-else class="text no">No flights found.</p>
@@ -22,6 +22,11 @@
 export default {
   props: {
     flights: Array
+  },
+  methods: {
+    goToSeats(flightId) {
+      this.$router.push(`/seats/${flightId}`);
+    }
   }
 };
 </script>
@@ -40,7 +45,6 @@ ul {
   border-radius: 12px;
   min-width: 800px;
   margin-top: -3%;
-  margin-left: center;
   height: 85vh;
   display: flex;
   flex-direction: column;
@@ -59,6 +63,12 @@ ul {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   margin-bottom: 30px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.flight-box:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .flight-image {
@@ -98,6 +108,7 @@ ul {
   font-size: 14px;
   margin-top: 5px;
 }
+
 .text.no {
   color: #000000;
   font-size: 20px;
