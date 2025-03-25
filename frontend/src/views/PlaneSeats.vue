@@ -1,5 +1,16 @@
 <template>
-  <div class="all">   
+  <div class="all">
+    <SeatSelectionPanels
+      :preferences="preferences"
+      :numberOfPassengers="numberOfPassengers"
+      :selectedSeats="selectedSeats"
+      :flight="flight"
+      @update:preferences="updatePreferences"
+      @update:numberOfPassengers="updateNumberOfPassengers"
+      @find-recommended="findRecommendedSeats"
+      @remove-seat="removeSeat"
+      @confirm="confirmSelection"
+    />    
     <PlaneLayout 
       :seats="seats"
       @selectSeat="selectSeat"
@@ -8,13 +19,16 @@
 </template>
 
 <script>
+import { useFlightStore } from '../stores/flightStore';
 import { useRoute } from 'vue-router';
+import SeatSelectionPanels from '../components/SeatSelectionPanels.vue';
 import PlaneLayout from '../components/PlaneLayout.vue';
 import SeatService from '../services/seatService';
 
 export default {
   name: "PlaneSeats",
   components: {
+    SeatSelectionPanels,
     PlaneLayout,
   },
   setup() {
@@ -84,8 +98,56 @@ export default {
       this.seats[seat.id].selected = false;
       this.selectedSeats = this.selectedSeats.filter((s) => s.id !== seat.id);
     },
+
+    updatePreferences(newPreferences) {
+      this.preferences = newPreferences;
     },
-  };
+
+    updateNumberOfPassengers(newNumber) {
+      this.clearSelectedSeats();
+      this.numberOfPassengers = newNumber;
+    },
+
+    clearSelectedSeats() {
+      this.selectedSeats.forEach((seat) => {
+        this.seats[seat.id].selected = false;
+      });
+      this.selectedSeats = [];
+    },
+
+    findRecommendedSeats() {
+      const recommendedSeats = SeatService.findRecommendedSeats(
+        this.seats, 
+        this.preferences, 
+        this.numberOfPassengers
+      );
+
+      Object.values(this.seats).forEach((seat) => {
+        seat.recommended = recommendedSeats.some(r => r.id === seat.id);
+      });
+
+      if (recommendedSeats.length === 0) {
+        alert("No seats available that match your preferences!");
+      } else if (recommendedSeats.length < this.numberOfPassengers) {
+        alert(`Only ${recommendedSeats.length} seats available that match your preferences.`);
+      }
+    },
+
+    confirmSelection() {
+      if (this.selectedSeats.length === 0) {
+        alert("Please select at least one seat.");
+        return;
+      }
+      if (this.selectedSeats.length !== this.numberOfPassengers) {
+        alert(`Please select exactly ${this.numberOfPassengers} seat(s).`);
+        return;
+      }
+
+      const seatInfo = this.selectedSeats.map((seat) => `${seat.id} (${seat.type})`).join(", ");
+      alert(`You've selected: ${seatInfo}`);
+    },
+  },
+};
 </script>
 
 <style scoped>
