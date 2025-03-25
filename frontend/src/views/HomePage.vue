@@ -67,5 +67,9 @@ export default {
   align-items: center;
   min-height: 100vh;
   padding: 20px;
+  background-image: url('@/assets/images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
 }
 </style>
