@@ -43,6 +43,7 @@
           <button @click="removeSeat(seat)" class="btn remove">Remove</button>
         </li>
       </ul>
+      <h4>Total Price: ${{ totalPrice }}</h4>
       <button @click="confirm" class="btn confirm" :disabled="selectedSeats.length === 0">
         Confirm Selection
       </button>
@@ -71,6 +72,16 @@ export default {
       required: true
     }
   },
+  computed: {
+  totalPrice() {
+    if (!this.flight || !this.flight.price) return 0;
+    
+    const priceNumber = parseFloat(this.flight.price.replace(/[^0-9.]/g, ''));
+
+    return this.selectedSeats.length * (isNaN(priceNumber) ? 0 : priceNumber);
+  },
+},
+
   methods: {
     updatePreference(key, value) {
       const newPreferences = { ...this.preferences };

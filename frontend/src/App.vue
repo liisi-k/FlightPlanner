@@ -10,10 +10,6 @@
         <span class="detail-label">Destination:</span>
         <span class="detail-value">{{ flightStore.flight.destination }}</span>
       </div>
-      <div class="flight-detail">
-        <span class="detail-label">Price:</span>
-        <span class="detail-value">{{ flightStore.flight.price }}</span>
-      </div>
     </div>
   </header>
   <router-view />
