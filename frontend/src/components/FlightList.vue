@@ -43,13 +43,15 @@ ul {
   border: 2px solid #f1f1f1;
   background-color: rgba(255, 255, 255, 0.513);
   border-radius: 12px;
-  min-width: 800px;
-  margin-top: -3%;
+  min-width: 35vw;
   height: 85vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  width: 20vw;
+  position: absolute;
+  left: 50%;
+  top: 13%;
+  transform: translateX(-50%); 
   overflow-y: scroll;
+  max-width: 600px;
 }
 
 .flight-box {
@@ -72,35 +74,34 @@ ul {
 }
 
 .flight-image {
-  width: 100%;
-  max-width: 700px;
-  height: 300px;
+  width: 400px;
+  height: 200px;
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 15px;
 }
 
 .flight-details {
-  height: 10vh;
-  width: 27vw;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  text-align: center;
+  text-align: left;
+  justify-content: space-between;
+  height: auto;
 }
 
 .text.dest{
   font-weight: bold;
   color: #333;
-  font-size: 30px;
-  text-align: left;
+  font-size: 18px; 
 }
 
 .text.price {
   color: #007bff;
   text-align: right;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
+  margin-top: 8px;
 }
 
 .text {

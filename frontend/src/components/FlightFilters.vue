@@ -69,23 +69,22 @@
   
   <style scoped>
 .filters-panel {
- display: flex;
-  flex-direction: column;
-  align-self: flex-start;
   position: absolute;
-  width: 400px;
-  height: 500px;
-  left:70%;
-  margin-top: 1%;
+  width: 200px;
+  height: 400px;
+  left: 85%;
+  top: 13%;
+  transform: translateX(-50%);
   background-color: rgba(255, 255, 255, 0.513);
-  border-radius: 6%;
+  border-radius: 12px;
   border-left: 1px solid #e0e6ed;
   padding: 20px;
   z-index: 100;
+  max-width: 400px; 
 }
 
 .filter-title {
-  font-size: 30px;
+  font-size: 23px;
   color: #000000;
   margin-bottom: 2px;
   font-weight: bold;
@@ -93,7 +92,7 @@
 
 .filter-group label {
   display: block;
-  font-size: 20px;
+  font-size: 13px;
   margin-top: 15px;
   color: #546e7a;
 }
@@ -104,7 +103,7 @@
   border-radius: 8px;
   border: 1px solid #d0d9e1;
   background-color: white;
-  font-size: 20px;
+  font-size: 13px;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
