@@ -11,6 +11,7 @@
     ./mvnw install  # Installib backend'i sõltuvused
     npm install     # Installib frontend'i sõltuvused
     npm install axios  # Installib axios, et frontend saaks teha päringud backendile
+   npm install sweetalert2   # Installib sweetalert2, kasutajasõbralikemate teavituste jaoks
     ```
 4. Liikuge kausta:
     ```bash
@@ -63,7 +64,7 @@ Rakenduse põhifunktsioonid:
 
 Autor
 Liisi Kask
-Lahenduse arendamiseks kulus umbes 20 tundi.
+Lahenduse arendamiseks kulus umbes 30 tundi.
 
 Aitäh
 Tänu järgmistele ressurssidele:
