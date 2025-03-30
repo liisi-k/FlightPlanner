@@ -1,16 +1,17 @@
 <template>
   <div class="all">
     <SeatSelectionPanels
-      :preferences="preferences"
-      :numberOfPassengers="numberOfPassengers"
-      :selectedSeats="selectedSeats"
-      :flight="flight"
-      @update:preferences="updatePreferences"
-      @update:numberOfPassengers="updateNumberOfPassengers"
-      @find-recommended="findRecommendedSeats"
-      @remove-seat="removeSeat"
-      @confirm="confirmSelection"
-    />    
+  :preferences="preferences"
+  :numberOfPassengers="numberOfPassengers"
+  :selectedSeats="selectedSeats"
+  :flight="flight"
+  @update:preferences="updatePreferences"
+  @update:numberOfPassengers="updateNumberOfPassengers"
+  @find-recommended="findRecommendedSeats"
+  @remove-seat="removeSeat"
+  @confirm="confirmSelection"
+  @update:totalPrice="updateTotalPrice" 
+  />
     <PlaneLayout 
       :seats="seats"
       @selectSeat="selectSeat"
@@ -24,6 +25,7 @@ import { useRoute } from 'vue-router';
 import SeatSelectionPanels from '../components/SeatSelectionPanels.vue';
 import PlaneLayout from '../components/PlaneLayout.vue';
 import SeatService from '../services/seatService';
+import Swal from 'sweetalert2';
 
 export default {
   name: "PlaneSeats",
@@ -47,6 +49,7 @@ export default {
         nearExit: false,
       },
       numberOfPassengers: 1,
+      totalPrice: 0, 
     };
   },
   created() {
@@ -54,6 +57,9 @@ export default {
     this.initializeSeats();
   },
   methods: {
+    updateTotalPrice(newPrice) {
+    this.totalPrice = newPrice; 
+  },
     async loadFlightData() {
       try {
         const flightNumber = this.route.params.flightId;
@@ -67,14 +73,18 @@ export default {
           throw new Error(`Flight ${flightNumber} not found`);
         }
       } catch (error) {
-        console.error(error.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.message,
+        });
       }
     },
 
     initializeSeats() {
       this.seats = SeatService.generateSeats();
     },
-    
+
     selectSeat(row, col) {
       const id = `${row}${col}`;
       const seat = this.seats[id];
@@ -89,7 +99,11 @@ export default {
           seat.selected = true;
           this.selectedSeats.push(seat);
         } else {
-          alert(`${this.numberOfPassengers} allowed`);
+          Swal.fire({
+            icon: 'warning',
+            title: 'Selection limit reached',
+            text: `${this.numberOfPassengers} seats allowed.`,
+          });
         }
       }
     },
@@ -127,25 +141,55 @@ export default {
       });
 
       if (recommendedSeats.length === 0) {
-        alert("No seats available that match your preferences!");
+        Swal.fire({
+          icon: 'info',
+          title: 'No recommendations',
+          text: 'No seats available that match your preferences!',
+        });
       } else if (recommendedSeats.length < this.numberOfPassengers) {
-        alert(`Only ${recommendedSeats.length} seats available that match your preferences.`);
+        Swal.fire({
+          icon: 'info',
+          title: 'Partial recommendation',
+          text: `Only ${recommendedSeats.length} seats available that match your preferences.`,
+        });
       }
     },
 
     confirmSelection() {
-      if (this.selectedSeats.length === 0) {
-        alert("Please select at least one seat.");
-        return;
-      }
-      if (this.selectedSeats.length !== this.numberOfPassengers) {
-        alert(`Please select exactly ${this.numberOfPassengers} seat(s).`);
-        return;
-      }
+    if (this.selectedSeats.length === 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'No seats selected',
+        text: 'Please select at least one seat.',
+      });
+      return;
+    }
+    if (this.selectedSeats.length !== this.numberOfPassengers) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Incorrect number of seats',
+        text: `Please select exactly ${this.numberOfPassengers} seat(s).`,
+      });
+      return;
+    }
 
-      const seatInfo = this.selectedSeats.map((seat) => `${seat.id} (${seat.type})`).join(", ");
-      alert(`You've selected: ${seatInfo}`);
-    },
+    const seatInfo = this.selectedSeats.map((seat) => `${seat.id} (${seat.type})`).join(", ");
+    
+    const flightImageUrl =`http://localhost:8080${this.flight.imageUrl}`
+    
+    Swal.fire({
+      icon: 'success',
+      title: 'Seats confirmed',
+      text: `You've selected: ${seatInfo}`,
+      html: `
+        <p>Total number of selected seats: ${this.selectedSeats.length}</p>
+        <p>Total price: €${this.totalPrice.toFixed(2)}</p> <!-- Show the total price here -->
+        <img src="${flightImageUrl}" alt="Flight Image" style="width: 100%; max-height: 200px; object-fit: cover;" />
+      `,
+      showCloseButton: true,
+      confirmButtonText: 'Confirm',
+    });
+  },
   },
 };
 </script>

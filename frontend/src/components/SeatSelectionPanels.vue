@@ -43,9 +43,9 @@
           <button @click="removeSeat(seat)" class="btn remove">Remove</button>
         </li>
       </ul>
-      <h4>Total Price: ${{ totalPrice }}</h4>
+      <h4>Total Price: {{ totalPrice }} €</h4>
       <button @click="confirm" class="btn confirm" :disabled="selectedSeats.length === 0">
-        Confirm Selection
+      Confirm Selection
       </button>
     </div>
   </div>
@@ -72,16 +72,22 @@ export default {
       required: true
     }
   },
-  computed: {
+computed: {
   totalPrice() {
     if (!this.flight || !this.flight.price) return 0;
-    
+
     const priceNumber = parseFloat(this.flight.price.replace(/[^0-9.]/g, ''));
+    this.$emit('update:totalPrice', this.selectedSeats.length * (isNaN(priceNumber) ? 0 : priceNumber));
 
     return this.selectedSeats.length * (isNaN(priceNumber) ? 0 : priceNumber);
   },
 },
 
+  watch: {
+    totalPrice(newValue) {
+      this.$emit('update:totalPrice', newValue); 
+    }
+  },
   methods: {
     updatePreference(key, value) {
       const newPreferences = { ...this.preferences };
