@@ -19,10 +19,18 @@ public class FlightController {
             "/images/imageLondon.jpg"),
             new Flight("FL456", "Paris", "150€", LocalDate.of(2025, 3, 25), LocalTime.of(15, 45),
             "/images/imageParis.jpg"),
-            new Flight("FL789", "Santorini", "220", LocalDate.of(2025, 4, 5), LocalTime.of(6, 30),
+            new Flight("FL789", "Santorini", "220€", LocalDate.of(2025, 4, 5), LocalTime.of(6, 30),
             "/images/imageSantorini.jpg"),
             new Flight("FL999", "Rome", "180€", LocalDate.of(2025, 3, 22), LocalTime.of(10, 00),
-            "/images/imageRome.jpg")
+            "/images/imageRome.jpg"),
+            new Flight("FL234", "Barcelona", "115€", LocalDate.of(2025, 5, 7), LocalTime.of(18, 30),
+            "/images/imageBarcelona.jpg"),
+            new Flight("FL567", "Tenerife", "350€", LocalDate.of(2025, 6, 25), LocalTime.of(21, 45),
+            "/images/imageTenerife.jpg"),
+            new Flight("FL890", "Egypt", "140€", LocalDate.of(2025, 4, 2), LocalTime.of(2, 30),
+            "/images/imageEgypt.jpg"),
+            new Flight("FL012", "Nice", "250€", LocalDate.of(2025, 7, 29), LocalTime.of(19, 00),
+            "/images/imageNice.jpg")
     ));
 
     @GetMapping
